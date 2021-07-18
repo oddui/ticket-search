@@ -8,7 +8,7 @@ const questions: PromptObject[] = [
   {
     type: "select",
     name: "entity",
-    message: "What would you like to search?",
+    message: "What would you like to search for?",
     choices: [
       { title: "User", value: "user" },
       { title: "Ticket", value: "ticket" },
@@ -24,23 +24,34 @@ const questions: PromptObject[] = [
     // @ts-expect-error
     fallback: "No matches. Please clear input to see options.",
     choices: entityFields,
-    clearFirst: true,
   },
   {
     type: "text",
     name: "term",
-    message: "Please enter your search term",
+    message: "Enter your search term",
   },
 ];
 
 (async () => {
-  const { entity, field, term } = await prompts(questions);
-
   const search = new Search();
   await search.readDataFiles(path.resolve(__dirname, "..", "data"));
-  const result = search.search(entity, field, term);
-  console.log(entity, field, term);
-  console.log(result);
+
+  console.info("\n- Welcome to ticket search\n- To exit, press Ctrl+C\n");
+  nextCommand();
+
+  async function nextCommand() {
+    const { entity, field, term } = await prompts(questions, {
+      onCancel: () => {
+        console.info("- Bye");
+        process.exit();
+      },
+    });
+    const result = search.search(entity, field, term);
+    console.log(entity, field, term);
+    console.log(result);
+
+    process.nextTick(nextCommand);
+  }
 })();
 
 function entityFields(entity: string) {
