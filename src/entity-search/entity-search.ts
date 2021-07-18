@@ -4,15 +4,11 @@ import SearchIndex, { SearchDocument } from "../search-index/search-index";
 export type FieldType = "hash" | "timestamp" | "string";
 
 abstract class EntitySearch {
-  protected indexes = new Map<string, SearchIndex>();
   protected documents = new Map<number, SearchDocument>();
+  protected indexes = new Map<string, SearchIndex>();
+  protected abstract fields: Map<string, FieldType>;
 
-  public abstract addIndex(field: string): this;
-  public abstract addIndexesForAllFields(): this;
-  public abstract search(field: string, term: string): SearchDocument[];
-  protected abstract assertIsKnownField(field: string): void;
-
-  getById(id: number) {
+  getDocumentById(id: number) {
     return this.documents.get(id);
   }
 
@@ -31,17 +27,51 @@ abstract class EntitySearch {
     return this;
   }
 
-  protected _addIndex(field: string, fieldType: FieldType): this {
+  addIndex(field: string): this {
+    this.assertIsKnownField(field);
+
+    const fieldType = this.fields.get(field) as FieldType;
     let index;
     switch (fieldType) {
       case "hash":
         index = new HashIndex(field);
         break;
-      default:
-        throw new Error(`Unknown field type "${fieldType}".`);
+      case "timestamp":
+        // TODO: use binary search index
+        index = new HashIndex(field);
+        break;
+      case "string":
+        // TODO: use trie index with tokenizer
+        index = new HashIndex(field);
+        break;
     }
     this.indexes.set(field, index);
     return this;
+  }
+
+  addIndexesForAllFields() {
+    for (const [field] of this.fields) {
+      this.addIndex(field);
+    }
+    return this;
+  }
+
+  search(field: string, term: string) {
+    this.assertIsKnownField(field);
+    this.assertFieldIsIndexed(field);
+
+    const index = this.indexes.get(field);
+    // @ts-expect-error: index is present
+    return index
+      .search(term)
+      .map((id) => this.documents.get(id))
+      .filter<SearchDocument>(this.isSearchDocument);
+  }
+
+  protected assertIsKnownField(field: string) {
+    if (!this.fields.has(field)) {
+      throw new Error(`Unknown field "${field}".`);
+    }
   }
 
   protected isSearchDocument(

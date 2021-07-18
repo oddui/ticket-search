@@ -1,7 +1,7 @@
 import path from "path";
 import prompts, { PromptObject } from "prompts";
 import { assertIsKnownEntity } from "./entity";
-import UserSearch from "./entity-search/user-search";
+import { userFields } from "./entity-search/user-search";
 import Search from "./search";
 
 const questions: PromptObject[] = [
@@ -60,11 +60,13 @@ function entityFields(entity: string) {
   let fields;
   switch (entity) {
     case "user":
-      fields = UserSearch.Fields.keys();
+      fields = userFields.keys();
     case "ticket":
-      fields = UserSearch.Fields.keys();
+      // TODO: use ticket fields
+      fields = new Map().keys();
     case "organization":
-      fields = UserSearch.Fields.keys();
+      // TODO: use organization fields
+      fields = new Map().keys();
   }
 
   return [...fields].map((field) => ({ title: field }));

@@ -1,6 +1,6 @@
 export type SearchDocument = {
   _id: number;
-  [field: string]: number | string | boolean;
+  [field: string]: number | string | string[] | boolean | undefined;
 };
 
 abstract class SearchIndex {

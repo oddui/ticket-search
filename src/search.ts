@@ -4,7 +4,7 @@ import { Entity } from "./entity";
 import UserSearch from "./entity-search/user-search";
 
 class Search {
-  private userSearch = new UserSearch();
+  private users = new UserSearch();
 
   constructor() {}
 
@@ -30,17 +30,21 @@ class Search {
       throw new Error(`Malformed users.json file.`);
     }
 
-    this.userSearch.addIndexesForAllFields();
-    this.userSearch.addDocuments(userDocuments);
+    this.users.addIndexesForAllFields();
+    this.users.addDocuments(userDocuments);
   }
 
   search(entity: Entity, field: string, term: string) {
     switch (entity) {
       case "user":
-        return this.userSearch.search(field, term);
+        // TODO: link associated created tickets, and assigned tickets
+        return this.users.search(field, term);
       case "ticket":
+        // TODO: use ticket search
         return;
       case "organization":
+        // TODO: use organization search
+        // TODO: link associated users, and tickets
         return;
     }
   }
