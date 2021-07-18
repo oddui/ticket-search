@@ -1,12 +1,12 @@
 import HashIndex from "../search-index/hash-index";
 import SearchIndex, { SearchDocument } from "../search-index/search-index";
 
-export type FieldType = "hash" | "timestamp" | "string";
+export type IndexType = "hash" | "binarySearch" | "trie";
 
 abstract class EntitySearch {
   protected documents = new Map<number, SearchDocument>();
   protected indexes = new Map<string, SearchIndex>();
-  protected abstract fields: Map<string, FieldType>;
+  protected abstract fields: Map<string, IndexType>;
 
   getDocumentById(id: number) {
     return this.documents.get(id);
@@ -30,17 +30,17 @@ abstract class EntitySearch {
   addIndex(field: string): this {
     this.assertIsKnownField(field);
 
-    const fieldType = this.fields.get(field) as FieldType;
+    const indexType = this.fields.get(field) as IndexType;
     let index;
-    switch (fieldType) {
+    switch (indexType) {
       case "hash":
         index = new HashIndex(field);
         break;
-      case "timestamp":
+      case "binarySearch":
         // TODO: use binary search index
         index = new HashIndex(field);
         break;
-      case "string":
+      case "trie":
         // TODO: use trie index with tokenizer
         index = new HashIndex(field);
         break;

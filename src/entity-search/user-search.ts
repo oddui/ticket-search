@@ -1,23 +1,23 @@
-import EntitySearch, { FieldType } from "./entity-search";
+import EntitySearch, { IndexType } from "./entity-search";
 
-export const userFields = new Map<string, FieldType>([
+export const userFields = new Map<string, IndexType>([
   ["_id", "hash"],
-  //["url", "string"],
+  //["url", "trie"],
   ["external_id", "hash"],
-  //["name", "string"],
-  //["alias", "string"],
-  //["created_at", "timestamp"],
+  //["name", "trie"],
+  //["alias", "trie"],
+  //["created_at", "binarySearch"],
   ["active", "hash"],
   ["verified", "hash"],
   ["shared", "hash"],
   ["locale", "hash"],
   ["timezone", "hash"],
-  //["last_login_at", "timestamp"],
-  //["email", "string"],
-  //["phone", "string"],
-  //["signature", "string"],
+  //["last_login_at", "binarySearch"],
+  //["email", "trie"],
+  //["phone", "trie"],
+  //["signature", "trie"],
   ["organization_id", "hash"],
-  //["tags", "string"],
+  //["tags", "trie"],
   ["suspended", "hash"],
   ["role", "hash"],
 ]);
