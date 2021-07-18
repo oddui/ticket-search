@@ -1,7 +1,8 @@
+import DateTimeBinarySearchIndex from "../search-index/date-time-binary-search-index";
 import HashIndex from "../search-index/hash-index";
 import SearchIndex, { SearchDocument } from "../search-index/search-index";
 
-export type IndexType = "hash" | "binarySearch" | "trie";
+export type IndexType = "hash" | "dateTimeBinarySearch" | "trie";
 
 abstract class EntitySearch {
   protected documents = new Map<number, SearchDocument>();
@@ -36,9 +37,8 @@ abstract class EntitySearch {
       case "hash":
         index = new HashIndex(field);
         break;
-      case "binarySearch":
-        // TODO: use binary search index
-        index = new HashIndex(field);
+      case "dateTimeBinarySearch":
+        index = new DateTimeBinarySearchIndex(field);
         break;
       case "trie":
         // TODO: use trie index with tokenizer
