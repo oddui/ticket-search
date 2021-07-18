@@ -1,0 +1,15 @@
+{
+  "name": "ticket-search",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Ziyu",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^27.0.6",
+    "standard-library-extensions": "^0.2.1",
+    "typescript": "^4.3.5"
+  }
+}
