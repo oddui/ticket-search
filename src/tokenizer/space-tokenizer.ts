@@ -20,7 +20,4 @@ class SpaceTokenizer {
   }
 }
 
-/**
- * Simple tokenizer that breaks text by white spaces.
- */
 export default SpaceTokenizer;

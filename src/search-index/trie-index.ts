@@ -11,7 +11,7 @@ class TrieIndex extends SearchIndex {
   }
 
   /**
-   * Tokenize the field and add to the internal Trie.
+   * Tokenize the field value and map the tokens to the document in the internal Trie.
    * @param doc
    * @returns
    */
@@ -38,7 +38,7 @@ class TrieIndex extends SearchIndex {
   }
 
   /**
-   * Returns ids that have been mapped to all tokens derived from the search term.
+   * Return ids that have been mapped to all tokens derived from the search term.
    * @param term
    * @returns
    */
