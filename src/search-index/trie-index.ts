@@ -1,10 +1,10 @@
 import TrieMap from "standard-library-extensions/dist/util/TrieMap";
 import { isArrayOfString } from "../helper";
 import Tokenizer from "../tokenizer/tokenizer";
-import SearchIndex, { SearchDocument } from "./search-index";
+import SearchIndex, { Id, SearchDocument } from "./search-index";
 
 class TrieIndex extends SearchIndex {
-  private index = new TrieMap<number[]>();
+  private index = new TrieMap<Id[]>();
 
   constructor(private field: string, private tokenizer: Tokenizer) {
     super();

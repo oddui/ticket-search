@@ -28,6 +28,8 @@ describe("DateTimeBinarySearchIndex", () => {
   });
 
   it("throws for invalid date time search term", () => {
-    expect(() => index.search("2021-04-15T05:19:46Melbourne")).toThrowError(/invalid date time/i);
-  })
+    expect(() => index.search("2021-04-15T05:19:46Melbourne")).toThrowError(
+      /invalid date time/i
+    );
+  });
 });

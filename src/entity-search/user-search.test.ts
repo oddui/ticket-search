@@ -1,10 +1,10 @@
-import UserSearch from "./user-search";
 import documents from "../../data/users.json";
+import UserSearch from "./user-search";
 
 describe("UserSearch", () => {
   let users: UserSearch;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     users = new UserSearch();
     users.addIndexesForAllFields();
     users.addDocuments(documents);
@@ -16,7 +16,9 @@ describe("UserSearch", () => {
 
   describe("search()", () => {
     it("throws error if field is not indexed", () => {
-      expect(() => new UserSearch().search("_id", "1")).toThrowError(/cannot search/i);
+      expect(() => new UserSearch().search("_id", "1")).toThrowError(
+        /cannot search/i
+      );
     });
 
     it("throws error for unknown field", () => {

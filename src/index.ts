@@ -1,6 +1,8 @@
 import path from "path";
 import prompts, { PromptObject } from "prompts";
 import { assertIsKnownEntity } from "./entity";
+import { organizationFields } from "./entity-search/organization-search";
+import { ticketFields } from "./entity-search/ticket-search";
 import { userFields } from "./entity-search/user-search";
 import Search from "./search";
 
@@ -69,12 +71,10 @@ function entityFields(entity: string) {
       fields = userFields.keys();
       break;
     case "ticket":
-      // TODO: use ticket fields
-      fields = new Map().keys();
+      fields = ticketFields.keys();
       break;
     case "organization":
-      // TODO: use organization fields
-      fields = new Map().keys();
+      fields = organizationFields.keys();
       break;
   }
 

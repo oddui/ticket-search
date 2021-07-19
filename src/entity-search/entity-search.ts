@@ -1,17 +1,17 @@
 import DateTimeBinarySearchIndex from "../search-index/date-time-binary-search-index";
 import HashIndex from "../search-index/hash-index";
-import SearchIndex, { SearchDocument } from "../search-index/search-index";
+import SearchIndex, { Id, SearchDocument } from "../search-index/search-index";
 import TrieIndex from "../search-index/trie-index";
 import SpaceTokenizer from "../tokenizer/space-tokenizer";
 
 export type IndexType = "hash" | "dateTimeBinarySearch" | "trie";
 
 abstract class EntitySearch {
-  protected documents = new Map<number, SearchDocument>();
+  protected documents = new Map<Id, SearchDocument>();
   protected indexes = new Map<string, SearchIndex>();
   protected abstract fields: Map<string, IndexType>;
 
-  getDocumentById(id: number) {
+  getDocumentById(id: Id) {
     return this.documents.get(id);
   }
 

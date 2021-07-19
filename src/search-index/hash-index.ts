@@ -1,7 +1,7 @@
-import SearchIndex, { SearchDocument } from "./search-index";
+import SearchIndex, { Id, SearchDocument } from "./search-index";
 
 class HashIndex extends SearchIndex {
-  private index = new Map<string, number[]>();
+  private index = new Map<string, Id[]>();
 
   constructor(private field: string) {
     super();
@@ -9,7 +9,7 @@ class HashIndex extends SearchIndex {
 
   indexDocument(doc: SearchDocument) {
     let value: string;
-    if ((this.field in doc)) {
+    if (this.field in doc) {
       // Cast value to string. This should work well for number, boolean, and string types.
       value = String(doc[this.field]);
     } else {
@@ -18,8 +18,8 @@ class HashIndex extends SearchIndex {
       value = "";
     }
 
-		if (!this.index.has(value)) this.index.set(value, []);
-		// @ts-expect-error: map entry defined above
+    if (!this.index.has(value)) this.index.set(value, []);
+    // @ts-expect-error: map entry defined above
     this.index.get(value).push(doc._id);
     return this;
   }

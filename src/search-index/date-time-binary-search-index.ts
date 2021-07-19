@@ -1,9 +1,9 @@
 import TreeMap from "standard-library-extensions/dist/util/TreeMap";
 import { parseDateTime } from "../helper";
-import SearchIndex, { SearchDocument } from "./search-index";
+import SearchIndex, { Id, SearchDocument } from "./search-index";
 
 class DateTimeBinarySearchIndex extends SearchIndex {
-  private index = new TreeMap<number, number[]>();
+  private index = new TreeMap<number, Id[]>();
 
   constructor(private field: string) {
     super();
