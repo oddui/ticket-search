@@ -15,7 +15,7 @@ describe("Search", () => {
       try {
         await search.readDataFiles("");
       } catch (e) {
-        expect(e.message).toMatch(/cannot find data file/i);
+        expect(e.message).toMatch(/failed to load data file/i);
       }
     });
   });

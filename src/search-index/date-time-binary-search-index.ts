@@ -30,7 +30,7 @@ class DateTimeBinarySearchIndex extends SearchIndex {
     if (term) {
       key = parseDateTime(term);
       if (Number.isNaN(key)) {
-        throw new Error(`Invalid date time search term "${term}"`);
+        throw new Error(`Invalid date time search term "${term}".`);
       }
     } else {
       key = NaN;

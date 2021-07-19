@@ -4,7 +4,7 @@ import { assertIsKnownEntity } from "./entity";
 import { organizationFields } from "./entity-search/organization-search";
 import { ticketFields } from "./entity-search/ticket-search";
 import { userFields } from "./entity-search/user-search";
-import Search from "./search";
+import Search, { SearchResult } from "./search";
 
 const questions: PromptObject[] = [
   {
@@ -35,10 +35,20 @@ const questions: PromptObject[] = [
 ];
 
 (async () => {
+  console.info("Starting ticket search...\n");
   const search = new Search();
-  await search.readDataFiles(path.resolve(__dirname, "..", "data"));
 
-  console.info("\n- Welcome to ticket search\n- To exit, press Ctrl+C\n");
+  try {
+    await search.readDataFiles(path.resolve(__dirname, "..", "data"));
+  } catch (e) {
+    console.info(`- ${e.message}`);
+    console.info(
+      `- Please place users.json, tickets.json, and organizations.json in the data folder.`
+    );
+    process.exit(1);
+  }
+
+  console.info("- Welcome to ticket search\n- To exit, press Ctrl+C\n");
   nextCommand();
 
   async function nextCommand() {
@@ -50,12 +60,15 @@ const questions: PromptObject[] = [
     });
 
     try {
-      const result = search.search(entity, field, term);
-      // TODO: display result
-      console.log(result);
-      console.info(`- ${result.length} result(s)`);
+      const results = search.search(entity, field, term);
+      console.info();
+      for (const result of results) {
+        printSearchResult(result);
+        console.info();
+      }
+      console.info(`- ${results.length} result(s)`);
     } catch (e) {
-      console.info(`- Failed to search. Reason: ${e.message}.`);
+      console.info(`- Failed to search. Reason: ${e.message}`);
     }
 
     process.nextTick(nextCommand);
@@ -79,4 +92,16 @@ function entityFields(entity: string) {
   }
 
   return [...fields].map((field) => ({ title: field }));
+}
+
+function printSearchResult(result: SearchResult) {
+  for (const [field, value] of Object.entries(result)) {
+    if (Array.isArray(value)) {
+      for (let i = 0; i < value.length; i++) {
+        console.info(`${field}_${i}`.padEnd(20), value[i]);
+      }
+    } else {
+      console.info(field.padEnd(20), value);
+    }
+  }
 }
