@@ -48,9 +48,9 @@ class TrieIndex extends SearchIndex {
 
     const result = new Set(this.documentIdsWithPrefix(tokens[0]));
     for (const token of tokens) {
-      const ids = this.documentIdsWithPrefix(token);
-      for (const id of ids) {
-        if (!result.has(id)) result.delete(id);
+      const ids = new Set(this.documentIdsWithPrefix(token));
+      for (const id of result) {
+        if (!ids.has(id)) result.delete(id);
       }
     }
     return [...result];

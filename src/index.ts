@@ -20,7 +20,8 @@ import Search, { SearchResult } from "./search";
     process.exit(1);
   }
 
-  console.info("- Welcome to ticket search\n- To exit, press Ctrl+C\n");
+  console.info(`- ${highlight("Welcome to ticket search")}`);
+  console.info(`- ${highlight("To exit, press Ctrl+C")}\n`);
   nextCommand();
 
   async function nextCommand() {
@@ -38,7 +39,19 @@ import Search, { SearchResult } from "./search";
         printSearchResult(result);
         console.info();
       }
-      console.info(`- ${results.length} result(s)`);
+      // Pluralize result(s)
+      switch (results.length) {
+        case 0:
+          console.info(`- no results\n`);
+          break;
+        case 1:
+          console.info(`- ${highlight("1 result", "1")}\n`);
+          break;
+        default:
+          console.info(
+            `- ${highlight(`${results.length} results`, `${results.length}`)}\n`
+          );
+      }
     } catch (e) {
       console.info(`- Failed to search. Reason: ${e.message}`);
     }
@@ -100,10 +113,24 @@ function printSearchResult(result: SearchResult) {
   for (const [field, value] of Object.entries(result)) {
     if (Array.isArray(value)) {
       for (let i = 0; i < value.length; i++) {
-        console.info(`${field}_${i}`.padEnd(20), value[i]);
+        console.info(`${field}_${i}`.padEnd(20), String(value[i]));
       }
     } else {
-      console.info(field.padEnd(20), value);
+      console.info(field.padEnd(20), String(value));
     }
+  }
+}
+
+/**
+ * Highlight part of text. The returned string should be used in console log methods.
+ * @param text
+ * @param part
+ * @returns
+ */
+function highlight(text: string, part?: string) {
+  if (part) {
+    return text.replace(part, `\x1b[36m$&\x1b[0m`);
+  } else {
+    return `\x1b[36m${text}\x1b[0m`;
   }
 }

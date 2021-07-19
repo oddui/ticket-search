@@ -52,15 +52,17 @@ I chose prefix tree (`TrieMap`) to map string fields to corresponding documents 
 
 - allows prefix based lookup
 - compact memory usage
-- lookup time is not relevant to the number of documents
+- a search hit is not relevant to the number of documents
 
-Search time complexity is O(L) for query term length L.
+Exact match time complexity is O(L) for query term length L.
+
+Prefix based search time complexity is O(L) + O(M) for query term length L and number values M having the prefix. This does mean that the time is about linear to the number of documents if the search term is very short. A minimum search term length limit can be used to prevent the worst case.
 
 ## Object oriented design
 
 The solution uses object oriented design. The main APIs are described below. There is a CLI client included in `src/index.ts`.
 
-#### SearchIndex
+### SearchIndex
 
 A SearchIndex efficiently looks up documents by a field. There are 3 types of indexes. See search strategy above for details.
 
@@ -68,7 +70,7 @@ A SearchIndex efficiently looks up documents by a field. There are 3 types of in
 - DateTimeBinarySearchIndex - for date times
 - TrieIndex - for strings
 
-#### Tokenizer
+### Tokenizer
 
 A Tokenizer is in charge of preparing the inputs for a search index.
 
@@ -76,7 +78,7 @@ A Tokenizer is in charge of preparing the inputs for a search index.
 
   It breaks strings into tokens by white space, converts tokens to lower case (case insensitive search), and removes some special characters.
 
-#### EntitySearch
+### EntitySearch
 
 An EntitySearch loads documents and uses indexes and tokenizers to search loaded documents.
 

@@ -29,6 +29,10 @@ describe("TrieIndex", () => {
     expect(index.search("Catas")).toEqual([1, 2, 5]);
   });
 
+  it("matches documents that have been mapped to all tokens", () => {
+    expect(index.search("catastrophe korea")).toEqual([1, 5]);
+  })
+
   it("return empty array if search miss", () => {
     expect(index.search("Melbourne")).toEqual([]);
   });
