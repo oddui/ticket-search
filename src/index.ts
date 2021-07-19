@@ -6,34 +6,6 @@ import { ticketFields } from "./entity-search/ticket-search";
 import { userFields } from "./entity-search/user-search";
 import Search, { SearchResult } from "./search";
 
-const questions: PromptObject[] = [
-  {
-    type: "select",
-    name: "entity",
-    message: "What would you like to search for?",
-    choices: [
-      { title: "User", value: "user" },
-      { title: "Ticket", value: "ticket" },
-      { title: "Organization", value: "organization" },
-    ],
-    initial: 0,
-  },
-  {
-    type: "autocomplete",
-    limit: 20,
-    name: "field",
-    message: "Choose a data field. Start typing to autocomplete.",
-    // @ts-expect-error
-    fallback: "No matches. Please clear input to see options.",
-    choices: entityFields,
-  },
-  {
-    type: "text",
-    name: "term",
-    message: "Enter your search term",
-  },
-];
-
 (async () => {
   console.info("Starting ticket search...\n");
   const search = new Search();
@@ -52,7 +24,7 @@ const questions: PromptObject[] = [
   nextCommand();
 
   async function nextCommand() {
-    const { entity, field, term } = await prompts(questions, {
+    const { entity, field, term } = await prompts(questions(), {
       onCancel: () => {
         console.info("- Bye");
         process.exit();
@@ -74,6 +46,36 @@ const questions: PromptObject[] = [
     process.nextTick(nextCommand);
   }
 })();
+
+function questions(): PromptObject[] {
+  return [
+    {
+      type: "select",
+      name: "entity",
+      message: "What would you like to search for?",
+      choices: [
+        { title: "User", value: "user" },
+        { title: "Ticket", value: "ticket" },
+        { title: "Organization", value: "organization" },
+      ],
+      initial: 0,
+    },
+    {
+      type: "autocomplete",
+      limit: 20,
+      name: "field",
+      message: "Choose a data field. Start typing to autocomplete.",
+      // @ts-expect-error
+      fallback: "No matches. Please clear input to see options.",
+      choices: entityFields,
+    },
+    {
+      type: "text",
+      name: "term",
+      message: "Enter your search term",
+    },
+  ];
+}
 
 function entityFields(entity: string) {
   assertIsKnownEntity(entity);
