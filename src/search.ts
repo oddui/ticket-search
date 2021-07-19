@@ -13,17 +13,17 @@ class Search {
   private tickets = new TicketSearch();
   private organizations = new OrganizationSearch();
 
-  constructor() {}
-
   /**
-   *
+   * Load and index data files.
    * @param folder the absolute path containing users.json, tickets.json, and organizations.json data files.
+   * @returns
    */
   async readDataFiles(folder: string) {
     const [userData, ticketData, organizationData] = await Promise.all(
-      ["users.json", "tickets.json", "organizations.json"].map((file) => {
+      ["users.json", "tickets.json", "organizations.json"].map(async (file) => {
         try {
-          return readFile(path.resolve(folder, file), "utf8");
+          const content = await readFile(path.resolve(folder, file), "utf8");
+          return content;
         } catch (e) {
           throw new Error(`Cannot find data file "${file}".`);
         }
@@ -60,14 +60,41 @@ class Search {
   search(entity: Entity, field: string, term: string) {
     switch (entity) {
       case "user":
-        // TODO: link associated created tickets, and assigned tickets
-        return this.users.search(field, term);
+        return this.searchUsers(field, term);
       case "ticket":
-        return this.tickets.search(field, term);
+        return this.searchTickets(field, term);
       case "organization":
-        // TODO: link associated users, and tickets
-        return this.organizations.search(field, term);
+        return this.searchOrganizations(field, term);
     }
+  }
+
+  private searchUsers(field: string, term: string) {
+    return this.users.search(field, term).map((result) => ({
+      ...result,
+      submitted_tickets: this.tickets
+        .search("submitter_id", String(result._id))
+        .map((ticket) => ticket.subject),
+      ...result,
+      assigned_tickets: this.tickets
+        .search("assignee_id", String(result._id))
+        .map((ticket) => ticket.subject),
+    }));
+  }
+
+  private searchTickets(field: string, term: string) {
+    return this.tickets.search(field, term);
+  }
+
+  private searchOrganizations(field: string, term: string) {
+    return this.organizations.search(field, term).map((result) => ({
+      ...result,
+      users: this.users
+        .search("organization_id", String(result._id))
+        .map((user) => user.name),
+      tickets: this.tickets
+        .search("organization_id", String(result._id))
+        .map((ticket) => ticket.subject),
+    }));
   }
 }
 
