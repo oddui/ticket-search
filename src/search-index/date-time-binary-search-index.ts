@@ -3,17 +3,17 @@ import { parseDateTime } from "../helper";
 import SearchIndex, { SearchDocument } from "./search-index";
 
 class DateTimeBinarySearchIndex extends SearchIndex {
-  private index = new TreeMap<number | string, number[]>();
+  private index = new TreeMap<number, number[]>();
 
   constructor(private field: string) {
     super();
   }
 
   indexDocument(doc: SearchDocument) {
+    const fieldValue = doc[this.field];
     let value: number;
-    if (typeof doc[this.field] === "string") {
-      // @ts-expect-error: doc[this.field] is string
-      value = parseDateTime(doc[this.field]);
+    if (typeof fieldValue === "string") {
+      value = parseDateTime(fieldValue);
     } else {
       // Use NaN to index empty or invalid date time.
       value = NaN;

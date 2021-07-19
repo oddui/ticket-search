@@ -8,3 +8,17 @@
 export function parseDateTime(str: string): number {
   return Date.parse(str.split(" ").join(""));
 }
+
+/**
+ * Type guard to check if input is an array of string.
+ * @param input 
+ * @returns 
+ */
+export function isArrayOfString(input: any): input is string[] {
+  if (!Array.isArray(input)) return false;
+
+  for (const item of input) {
+    if (typeof item !== "string") return false;
+  }
+  return true;
+}

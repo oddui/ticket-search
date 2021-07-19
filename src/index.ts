@@ -46,9 +46,15 @@ const questions: PromptObject[] = [
         process.exit();
       },
     });
-    const result = search.search(entity, field, term);
-    console.log(entity, field, term);
-    console.log(result);
+
+    try {
+      const result = search.search(entity, field, term);
+      // TODO: display result
+      console.log(result);
+      console.info(`- ${result.length} result(s)`);
+    } catch (e) {
+      console.info(`- Failed to search. Reason: ${e.message}.`);
+    }
 
     process.nextTick(nextCommand);
   }
@@ -61,12 +67,15 @@ function entityFields(entity: string) {
   switch (entity) {
     case "user":
       fields = userFields.keys();
+      break;
     case "ticket":
       // TODO: use ticket fields
       fields = new Map().keys();
+      break;
     case "organization":
       // TODO: use organization fields
       fields = new Map().keys();
+      break;
   }
 
   return [...fields].map((field) => ({ title: field }));

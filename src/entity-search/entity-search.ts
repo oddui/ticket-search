@@ -1,6 +1,8 @@
 import DateTimeBinarySearchIndex from "../search-index/date-time-binary-search-index";
 import HashIndex from "../search-index/hash-index";
 import SearchIndex, { SearchDocument } from "../search-index/search-index";
+import TrieIndex from "../search-index/trie-index";
+import SpaceTokenizer from "../tokenizer/space-tokenizer";
 
 export type IndexType = "hash" | "dateTimeBinarySearch" | "trie";
 
@@ -41,8 +43,7 @@ abstract class EntitySearch {
         index = new DateTimeBinarySearchIndex(field);
         break;
       case "trie":
-        // TODO: use trie index with tokenizer
-        index = new HashIndex(field);
+        index = new TrieIndex(field, new SpaceTokenizer());
         break;
     }
     this.indexes.set(field, index);

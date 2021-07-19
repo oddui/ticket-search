@@ -3,6 +3,9 @@ import path from "path";
 import { Entity } from "./entity";
 import UserSearch from "./entity-search/user-search";
 
+/**
+ * Read data files and route query to different entity searches.
+ */
 class Search {
   private users = new UserSearch();
 
@@ -41,11 +44,11 @@ class Search {
         return this.users.search(field, term);
       case "ticket":
         // TODO: use ticket search
-        return;
+        return [];
       case "organization":
         // TODO: use organization search
         // TODO: link associated users, and tickets
-        return;
+        return [];
     }
   }
 }
