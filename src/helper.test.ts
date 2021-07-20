@@ -8,8 +8,11 @@ describe("helpers", () => {
     it("parses ISO 8601 date time string", () => {
       expect(typeof parseDateTime(new Date().toISOString())).toBe("number");
     });
+    it("parses UTC date time string", () => {
+      expect(typeof parseDateTime(new Date().toUTCString())).toBe("number");
+    });
     it("return `NaN` for invalid date time string", () => {
-      expect(parseDateTime("invalid time")).toBe(NaN);
+      expect(parseDateTime("invalid date")).toBe(NaN);
     });
   });
 
