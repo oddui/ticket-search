@@ -53,7 +53,7 @@ import Search, { SearchResult } from "./search";
           );
       }
     } catch (e) {
-      console.info(`- Failed to search. Reason: ${e.message}`);
+      console.info(`\n- Failed to search. Reason: ${e.message}\n`);
     }
 
     process.nextTick(nextCommand);
